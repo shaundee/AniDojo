@@ -3,9 +3,10 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import url, { options } from "../utils/requests.js";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+import Banner from "../components/Banner.js";
 
-const Home = ({ media, pageInfo }) => {
-  console.log(media);
+const Home = ({ topTrending, pageInfo }) => {
+  console.log(topTrending);
   // console.log(pageInfo);
   // console.log(data.Page.media[0].title);
 
@@ -15,8 +16,8 @@ const Home = ({ media, pageInfo }) => {
         <title>Anime dojo</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <main className="  flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
+      <Banner topTrending={topTrending} />
+      {/* <main className="  flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
         <div> anime title: {media[0].title.romaji}</div>
         <div>
           {media.map((media) => {
@@ -27,7 +28,8 @@ const Home = ({ media, pageInfo }) => {
             );
           })}
         </div>
-      </main>
+      </main> */}
+      <div></div>
     </div>
   );
 };
@@ -36,14 +38,13 @@ export default Home;
 export const getServerSideProps = async () => {
   const {
     data: {
-      Page: { pageInfo, media },
+      Page: { media: topTrending },
     },
   } = await (await fetch(url, options)).json();
-
+  console.log("lol");
   return {
     props: {
-      media,
-      pageInfo,
+      topTrending,
     },
   };
 };
