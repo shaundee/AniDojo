@@ -1,5 +1,27 @@
 // Build the Anime Query!!!
-var query = `
+let topFavourited = `
+query ($id: Int, $page: Int, $perPage: Int) {
+  Page(page: $page, perPage: $perPage) {
+    media(id: $id, sort: [FAVOURITES_DESC], type: ANIME) {
+      id
+      title {
+        romaji
+      }
+      favourites
+      bannerImage
+      description
+    }
+    pageInfo{
+      total
+      currentPage
+      lastPage
+      hasNextPage
+      perPage
+    }
+  }
+}
+`;
+let topTrending = `
 query ($id: Int, $page: Int, $perPage: Int) {
   Page(page: $page, perPage: $perPage) {
     media(id: $id, sort: [TRENDING_DESC], type: ANIME) {
@@ -7,38 +29,43 @@ query ($id: Int, $page: Int, $perPage: Int) {
       title {
         romaji
       }
-      trending
-      source
-      coverImage {
-        extraLarge
-        large
-        medium
-        color
-      }
-      bannerImage
-      description
+ 
     }
+ 
   }
 }
 `;
 
-var variables = {
+let variables = {
   page: 1,
-  perPage: 15,
+  perPage: 14,
 };
 
-var url = "https://graphql.anilist.co",
-  options = {
+let favouritesURL = "https://graphql.anilist.co",
+  favouritesOptions = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
     },
     body: JSON.stringify({
-      query: query,
+      query: topFavourited,
       variables: variables,
     }),
   };
 
-export default url;
-export { options };
+let trendingURL = "https://graphql.anilist.co",
+  trendingOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      query: topTrending,
+      variables: variables,
+    }),
+  };
+
+export default favouritesURL;
+export { favouritesOptions, trendingURL, trendingOptions };

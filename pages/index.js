@@ -1,34 +1,39 @@
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import url, { options } from "../utils/requests.js";
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-import Banner from "../components/Banner.js";
+import favouritesURL, {
+  favouritesOptions,
+  trendingURL,
+  trendingOptions,
+} from "../utils/requests.js";
 
-const Home = ({ topTrending, pageInfo }) => {
-  console.log(topTrending);
-  // console.log(pageInfo);
-  // console.log(data.Page.media[0].title);
+import Banner from "../components/Banner.js";
+import { useRecoilState } from "recoil";
+import { favState, trendState } from "../atoms/dataAtoms.js";
+import { concatAST } from "graphql";
+
+const Home = ({ favouritesData, trendingData }) => {
+  // console.log(data.Page.topTrending[0].title);
 
   return (
-    <div className=" flex min-h-screen flex-col items-center justify-center py-2">
+    <div className=" ">
       <Head>
         <title>Anime dojo</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Banner topTrending={topTrending} />
-      {/* <main className="  flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-        <div> anime title: {media[0].title.romaji}</div>
-        <div>
-          {media.map((media) => {
+      {/* <p>{topTrending.id}</p> */}
+      <Banner favouritesData={favouritesData} />
+      <main className=" ">
+        {/* <div>
+          {topTrending.map((topTrending) => {
             return (
-              <h1 className="tex-bold text-green-700" key={media.id}>
-                name:{media.title.romaji} Id: {media.id}
+              <h1 className="tex-bold text-green-700" key={topTrending.id}>
+                name: {topTrending.title.romaji} Id: {topTrending.id}
               </h1>
             );
           })}
-        </div>
-      </main> */}
+        </div> */}
+      </main>
       <div></div>
     </div>
   );
@@ -38,13 +43,20 @@ export default Home;
 export const getServerSideProps = async () => {
   const {
     data: {
-      Page: { media: topTrending },
+      Page: { media: favouritesData },
     },
-  } = await (await fetch(url, options)).json();
-  console.log("lol");
+  } = await (await fetch(favouritesURL, favouritesOptions)).json();
+
+  const {
+    data: {
+      Page: { media: trendingData },
+    },
+  } = await (await fetch(trendingURL, trendingOptions)).json();
+
   return {
     props: {
-      topTrending,
+      favouritesData,
+      trendingData,
     },
   };
 };
