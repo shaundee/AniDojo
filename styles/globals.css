@@ -4,6 +4,14 @@
 
 @layer base {
   body {
-    @apply bg-stone-900 text-gray-300;
+    @apply text-white bg-[#13141c];
   }
+}
+@layer components {
+  .bannerContainer {
+    box-shadow: inset 0px -30px 50px 90px rgba(19, 20, 28);
+  }
+  /* .infoBox {
+    box-shadow: 40px 0px 100px 50px #13141c;
+  } */
 }

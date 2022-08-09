@@ -1,12 +1,19 @@
 import React, { useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { animeDataState } from "../atoms/dataAtoms";
 
-const Slider = ({ trending }) => {
-  // console.log(trending);
+const Slider = ({ data }) => {
   const [favourites, setFavourites] = useState(1);
-
+  const animeData = useRecoilValue(animeDataState);
+  console.log(animeData[0]?.title);
+  console.log(animeData);
   return (
-    <div>
-      <img src={trending.bannerImage} />
+    <div className="bg-green-900 h-screen ">
+      {animeData[0]?.title}
+      {/* {animeData.map((slide, index) => {
+        return <div key={index}>sadsad {slide.title}</div>;
+      })} */}
+      adadad
     </div>
   );
 };

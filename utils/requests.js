@@ -1,71 +1,21 @@
-// Build the Anime Query!!!
-let topFavourited = `
-query ($id: Int, $page: Int, $perPage: Int) {
-  Page(page: $page, perPage: $perPage) {
-    media(id: $id, sort: [FAVOURITES_DESC], type: ANIME) {
-      id
-      title {
-        romaji
-      }
-      favourites
-      bannerImage
-      description
-    }
-    pageInfo{
-      total
-      currentPage
-      lastPage
-      hasNextPage
-      perPage
-    }
-  }
-}
-`;
-let topTrending = `
-query ($id: Int, $page: Int, $perPage: Int) {
-  Page(page: $page, perPage: $perPage) {
-    media(id: $id, sort: [TRENDING_DESC], type: ANIME) {
-      id
-      title {
-        romaji
-      }
- 
-    }
- 
-  }
-}
-`;
-
-let variables = {
-  page: 1,
-  perPage: 14,
+const genres = {
+  action: 1,
+  adventure: 2,
+  awardWinning: 46,
+  comedy: 4,
+  drama: 8,
+  fantasy: 10,
+  romance: 22,
+  sliceOfLife: 36,
 };
 
-let favouritesURL = "https://graphql.anilist.co",
-  favouritesOptions = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      query: topFavourited,
-      variables: variables,
-    }),
-  };
-
-let trendingURL = "https://graphql.anilist.co",
-  trendingOptions = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      query: topTrending,
-      variables: variables,
-    }),
-  };
-
-export default favouritesURL;
-export { favouritesOptions, trendingURL, trendingOptions };
+const requests = {
+  fetchTrending: ` https://kitsu.io/api/edge/trending/anime?&sort=-favoritesCount`,
+  fetchPopular: `https://kitsu.io/api/edge/anime?sort=userCount`,
+  fetchAction: ` https://kitsu.io/api/edge/anime?filter[categories]=Action&sort=-favoritesCount`,
+  fetchComedy: `https://kitsu.io/api/edge/anime?filter[categories]=comedy&sort=-favoritesCount`,
+  fetchDrama: ` https://kitsu.io/api/edge/anime?filter[categories]=horror&sort=-favoritesCount`,
+  fetchRomance: ` https://kitsu.io/api/edge/anime?filter[categories]=romance&sort=-favoritesCount`,
+  fetchAllAnime: ` https://kitsu.io/api/edge/anime`,
+};
+export default requests;

@@ -1,62 +1,100 @@
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import favouritesURL, {
-  favouritesOptions,
-  trendingURL,
-  trendingOptions,
-} from "../utils/requests.js";
 
 import Banner from "../components/Banner.js";
-import { useRecoilState } from "recoil";
-import { favState, trendState } from "../atoms/dataAtoms.js";
-import { concatAST } from "graphql";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  animeDataState,
+  kitsuDataState,
+  modalState,
+} from "../atoms/dataAtoms.js";
 
-const Home = ({ favouritesData, trendingData }) => {
-  // console.log(data.Page.topTrending[0].title);
+import Modal from "../components/Modal.js";
+import Slider from "../components/Slider.js";
+import Row from "../components/Row.js";
+import requests from "../utils/requests.js";
+import ReactPlayer from "react-player";
+import MuiModal from "@mui/material/Modal";
+import AnimesModal from "../components/AnimesModal.js";
+
+const Home = ({
+  trendingAnime,
+  popularAnime,
+  actionAnime,
+  comedyAnime,
+  dramaAnime,
+  romanceAnime,
+  allAnime,
+}) => {
+  // console.log(trendingAnime);
+
+  const showModal = useRecoilValue(modalState);
+
+  const [trending, setTrending] = useRecoilState(kitsuDataState);
+
+  useEffect(() => {
+    if (trendingAnime) {
+      setTrending(trendingAnime);
+    }
+  }, [trendingAnime]);
+
+  // console.log(allAnime);
 
   return (
-    <div className=" ">
+    <div className={`  ${showModal && "!h-screen overflow-hidden"}`}>
       <Head>
         <title>Anime dojo</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* <p>{topTrending.id}</p> */}
-      <Banner favouritesData={favouritesData} />
-      <main className=" ">
-        {/* <div>
-          {topTrending.map((topTrending) => {
-            return (
-              <h1 className="tex-bold text-green-700" key={topTrending.id}>
-                name: {topTrending.title.romaji} Id: {topTrending.id}
-              </h1>
-            );
-          })}
-        </div> */}
+
+      {/* <Slider /> */}
+      <main className="flex flex-col  ">
+        <Banner />
+        <section className="w-[90vw] mx-auto">
+          <Row title="Trending" animes={popularAnime} />
+          <Row title="Action" animes={actionAnime} />
+          <Row title="Comedy" animes={comedyAnime} />
+          <Row title="Horror" animes={dramaAnime} />
+          <Row title="Romance" animes={romanceAnime} />
+        </section>
       </main>
-      <div></div>
+      {showModal && <Modal />}
     </div>
   );
 };
 
+// genres mal_id
+
 export default Home;
 export const getServerSideProps = async () => {
-  const {
-    data: {
-      Page: { media: favouritesData },
-    },
-  } = await (await fetch(favouritesURL, favouritesOptions)).json();
-
-  const {
-    data: {
-      Page: { media: trendingData },
-    },
-  } = await (await fetch(trendingURL, trendingOptions)).json();
+  const [
+    { data: trendingAnime },
+    { data: popularAnime },
+    { data: actionAnime },
+    { data: comedyAnime },
+    { data: dramaAnime },
+    { data: romanceAnime },
+    { data: allAnime },
+  ] = await Promise.all([
+    fetch(requests.fetchTrending).then((res) => res.json()),
+    fetch(requests.fetchPopular).then((res) => res.json()),
+    fetch(requests.fetchAction).then((res) => res.json()),
+    fetch(requests.fetchComedy).then((res) => res.json()),
+    fetch(requests.fetchDrama).then((res) => res.json()),
+    fetch(requests.fetchRomance).then((res) => res.json()),
+    fetch(requests.fetchAllAnime).then((res) => res.json()),
+  ]);
 
   return {
     props: {
-      favouritesData,
-      trendingData,
+      trendingAnime,
+      popularAnime,
+      actionAnime,
+      comedyAnime,
+      dramaAnime,
+      romanceAnime,
+      allAnime,
     },
   };
 };

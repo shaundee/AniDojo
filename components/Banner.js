@@ -1,29 +1,31 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import Slider from "./Slider";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/outline";
-import { INTERNALS } from "next/dist/server/web/spec-extension/request";
+import { PlayIcon } from "@heroicons/react/solid";
+import TextTruncate from "react-text-truncate";
+import {
+  animeDataState,
+  currentAnimeState,
+  kitsuDataState,
+  modalState,
+} from "../atoms/dataAtoms";
+import { useRecoilState, useRecoilValue } from "recoil";
 
-import { favState } from "../atoms/dataAtoms";
-import { useRecoilValue } from "recoil";
+const Banner = () => {
+  // console.log(favouritesData[0].id);
 
-const Banner = ({ favouritesData }) => {
-  const [current, setCurrent] = useState(0);
-  const autoSlider = true;
+  const [current, setCurrent] = useRecoilState(currentAnimeState);
+  const [anime, setAnime] = useState(null);
+  const [showModal, setShowModal] = useRecoilState(modalState);
+  const trending = useRecoilValue(kitsuDataState);
+
+  const autoSlider = false;
   let slideInterval;
-  let interval = 5000; // 5 seconds
+  let interval = 3000; // 5 seconds
+  // console.log(animeData);
+  // console.log(trending);
 
-  const [isActiveBtn, setIsActiveBtn] = useState(false);
-
-  const nextSlide = () => {
-    setCurrent(current === favouritesData.length - 1 ? 0 : current + 1);
-  };
-  const prevSlide = () => {
-    setCurrent(current === 0 ? favouritesData.length - 1 : current - 1);
-  };
-  const autoNext = () => {
-    slideInterval = setInterval(nextSlide, interval);
-  };
+  // console.log(animeData[5]?.images.jpg.image_url);
 
   useEffect(() => {
     if (autoSlider) {
@@ -34,54 +36,93 @@ const Banner = ({ favouritesData }) => {
     }
   }, [current]);
 
-  if (!Array.isArray(favouritesData) || favouritesData.length <= 0) {
+  const nextSlide = () => {
+    setCurrent(current === trending.length - 1 ? 0 : current + 1);
+  };
+  const prevSlide = () => {
+    setCurrent(current === 0 ? trending.length - 1 : current - 1);
+  };
+  const autoNext = () => {
+    slideInterval = setInterval(nextSlide, interval);
+  };
+
+  if (!Array.isArray(trending) || trending.length <= 0) {
     return null;
   }
-  return (
-    <div className="flex flex-col space-y-2 py-16 md:space-y-4 lg:h-[65vh] lg:justify-end lg:pb-12 bg-slate-400  ">
-      <h1 className="text-green-500">{favouritesData.id}</h1>
-      <div className="group">
-        <ChevronLeftIcon
-          className={`h-10 w-10 p-2 absolute top-1/3 rounded-full border-emerald-500 bg-violet-700 hover:bg-emerald-500/80 text-white hover:text-violet-700 left-[5%] z-20 cursor-pointer opacity-0 group-hover:opacity-100 `}
-          onClick={prevSlide}
-        />
-        <ChevronRightIcon
-          className={`h-10 w-10 p-2 absolute top-1/3 rounded-full border-emerald-500 bg-violet-700 hover:bg-emerald-500/80 text-white hover:text-violet-700 right-[5%] z-20 cursor-pointer opacity-0 group-hover:opacity-100 
-        `}
-          onClick={nextSlide}
-        />
 
-        {favouritesData.map((slide, index) => {
-          return (
-            <div
-              className={`${
-                index === current ? "slide active" : "slide"
-              } absolute top-0 left-2/4 -translate-x-2/4 z-10 h-[60vh] w-[100vw] `}
-              key={index}
-            >
-              {index === current && (
-                <Image
-                  src={slide.bannerImage}
-                  objectFit="cover"
-                  layout="fill"
-                  className="select-none group"
-                  priority
-                />
-              )}
-            </div>
-          );
-        })}
-      </div>
-      <div className="flex gap-x-[6px] left-2/4 -translate-x-2/4 absolute top-2 z-10">
-        {Array.from({ length: 14 }).map((item, index) => (
+  return (
+    <div className=" ">
+      {trending.map((slide, index) => {
+        return (
           <div
             key={index}
             className={`${
-              current === index ? "bg-emerald-300" : "bg-violet-700"
-            } h-[15px] min-w-[15px] rounded-full  `}
-          ></div>
-        ))}
-      </div>
+              index === current ? "slide active" : "slide"
+            } group bg-slate-500`}
+          >
+            {index === current && (
+              <div className=" flex min-h-[50vh] relative min-w-full ">
+                <div className="bannerContainer flex z-10 min-h-[50vh] absolute w-full"></div>
+                <Image
+                  src={slide.attributes.coverImage.large}
+                  objectFit="cover"
+                  layout="fill"
+                  className="select-none group "
+                  priority
+                />
+
+                <div className=" flex flex-col self-start  absolute md:ml-20 p-10 z-10 max-w-lg ">
+                  <h2 className="text-lg text-sky-500 font-semibold">
+                    <span># {current + 1} </span> Popular
+                  </h2>
+                  <h1 className="text-2xl md:text-6xl text-sky-500 font-bold">
+                    {slide.attributes.titles.en ||
+                      slide.attributes.titles.en_jp}
+                  </h1>
+                  <TextTruncate
+                    line={3}
+                    element="p"
+                    truncateText="…"
+                    text={slide.attributes.description}
+                    className="text-lg text-sky-300"
+                  />
+                  <button
+                    onClick={() => {
+                      setShowModal(true);
+                      setAnime(null);
+                    }}
+                    className="flex text-white text-sm md:text-base gap-x-2 items-center justify-center  rounded-full bg-green-500 max-w-[9rem]  md:max-w-[12rem] h-12 mt-8 hover:cursor-pointer z-30 "
+                  >
+                    <PlayIcon className="h-5 w-5" />
+                    Watch Now
+                  </button>
+                </div>
+
+                <div className="flex gap-x-[6px] self-end z-10 w-auto items-center mx-auto mb-5">
+                  <ChevronLeftIcon
+                    className={`h-10 w-10 p-2 mr-5 rounded-full border-emerald-500 bg-violet-700 hover:bg-emerald-500/80 text-white hover:text-violet-700 left-[10%] z-10 cursor-pointer opacity-0 group-hover:opacity-100 `}
+                    onClick={prevSlide}
+                  />
+                  {Array.from({ length: 14 }).map((item, index) => (
+                    <div
+                      key={index}
+                      className={`${
+                        index === current ? "bg-emerald-300" : "bg-violet-700"
+                      } h-[15px] min-w-[15px] rounded-full  `}
+                    ></div>
+                  ))}
+
+                  <ChevronRightIcon
+                    className={`h-10 w-10 p-2 ml-5 rounded-full border-emerald-500 bg-violet-700 hover:bg-emerald-500/80 text-white hover:text-violet-700 right-[10%] z-10 cursor-pointer opacity-0 group-hover:opacity-100 
+        `}
+                    onClick={nextSlide}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };

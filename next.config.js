@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["s4.anilist.co"],
+    domains: ["cdn.myanimelist.net", "img.youtube.com", "media.kitsu.io"],
   },
 };
 
