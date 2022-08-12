@@ -5,18 +5,14 @@ import { useEffect, useState } from "react";
 import Banner from "../components/Banner.js";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
-  animeDataState,
+  animesModalState,
+  bannerModalState,
   kitsuDataState,
-  modalState,
 } from "../atoms/dataAtoms.js";
-
-import Modal from "../components/Modal.js";
-import Slider from "../components/Slider.js";
+import BannerModal from "../components/BannerModal.js";
 import Row from "../components/Row.js";
 import requests from "../utils/requests.js";
-import ReactPlayer from "react-player";
-import MuiModal from "@mui/material/Modal";
-import AnimesModal from "../components/AnimesModal.js";
+import RowsModal from "../components/RowsModal.js";
 
 const Home = ({
   trendingAnime,
@@ -29,8 +25,8 @@ const Home = ({
 }) => {
   // console.log(trendingAnime);
 
-  const showModal = useRecoilValue(modalState);
-
+  const showModal = useRecoilValue(animesModalState);
+  const showBannerModal = useRecoilValue(bannerModalState);
   const [trending, setTrending] = useRecoilState(kitsuDataState);
 
   useEffect(() => {
@@ -48,7 +44,6 @@ const Home = ({
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/* <Slider /> */}
       <main className="flex flex-col  ">
         <Banner />
         <section className="w-[90vw] mx-auto">
@@ -59,7 +54,8 @@ const Home = ({
           <Row title="Romance" animes={romanceAnime} />
         </section>
       </main>
-      {showModal && <Modal />}
+      {showModal && <RowsModal />}
+      {showBannerModal && <BannerModal />}
     </div>
   );
 };

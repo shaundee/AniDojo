@@ -1,7 +1,7 @@
 import { atom } from "recoil";
 
-export const modalState = atom({
-  key: "modalState",
+export const bannerModalState = atom({
+  key: "bannerModalState",
   default: false,
 });
 export const animesModalState = atom({
