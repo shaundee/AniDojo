@@ -31,6 +31,7 @@ const Banner = () => {
 
   useEffect(() => {
     if (showBannerModal === false) {
+      autoNext();
       return () => {
         clearInterval(slideInterval);
       };
