@@ -41,8 +41,8 @@ const Row = ({ animes, title }) => {
       </h2>
       <div className=" flex scrollbar-hide relative auto">
         <ChevronLeftIcon
-          className={`absolute top-0 bottom-0 left-2 z-40 m-auto cursor-pointer opacity-0 h-12 w-20 hover:text-emerald-500/80 text-white hover:text-emerald-500 
-          hover:scale-125 group-hover:opacity-100 ${!isMoved && "hidden"}`}
+          className={`absolute top-0 bottom-0 left-2 z-40 m-auto cursor-pointer opacity-0 h-16 w-16  text-sky-500 hover:text-purple-800 
+          hover:scale-125 md:group-hover:opacity-100 ${!isMoved && "hidden"}`}
           onClick={() => handleClick("left")}
         />
         <div
@@ -60,15 +60,15 @@ const Row = ({ animes, title }) => {
                 text={
                   anime.attributes.titles.en || anime.attributes.titles.en_jp
                 }
-                className="mx-auto text-center flex self-end  justify-center text-sm md:text-base font-bold text-gray-300 z-10"
+                className="mx-auto text-center flex self-end h-14 items-center justify-center text-sm md:text-base font-bold text-sky-300 z-10 bg-neutral-900 p-2"
               />
             </div>
           ))}
         </div>
 
         <ChevronRightIcon
-          className={`absolute top-0 bottom-0 right-4 z-40 m-auto h-12 w-20 cursor-pointer opacity-0 
-            hover:scale-125 group-hover:opacity-100 text-white hover:text-emerald-500`}
+          className={`absolute top-0 bottom-0 right-4 z-40 m-auto h-16 w-16 rounded-md cursor-pointer opacity-0 
+          hover:scale-125 md:group-hover:opacity-100 text-sky-500 hover:text-purple-800`}
           onClick={() => handleClick("right")}
         />
       </div>

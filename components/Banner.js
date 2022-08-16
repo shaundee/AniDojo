@@ -17,7 +17,7 @@ const Banner = () => {
   const trending = useRecoilValue(kitsuDataState);
 
   let slideInterval;
-  let interval = 5000; // 5 seconds
+  let interval = 10000; // 5 seconds
 
   const nextSlide = () => {
     setCurrent(current === trending.length - 1 ? 0 : current + 1);
@@ -46,11 +46,11 @@ const Banner = () => {
             key={index}
             className={`${
               index === current ? "slide active" : "slide"
-            } group bg-slate-500`}
+            } group bg-slate-500 select-none`}
           >
             {index === current && (
-              <div className=" flex min-h-[50vh] md:min-h-[60vh] xl:min-h-[80vh]  relative min-w-full ">
-                <div className="bannerContainer z-10 min-h-[50vh] md:min-h-[60vh] xl:min-h-[80vh]  absolute w-full"></div>
+              <div className=" flex h-[50vh] md:min-h-[80vh]  relative min-w-full ">
+                <div className="bannerContainer h-[50vh] bg-neutral-900/40 z-10 md:min-h-[80vh] absolute w-full"></div>
                 <Image
                   src={slide.attributes.coverImage.large}
                   objectFit="cover"
@@ -72,14 +72,14 @@ const Banner = () => {
                     element="p"
                     truncateText="…"
                     text={slide.attributes.description}
-                    className="text-sm md:font-bold md:text-base lg:text-xl text-gray-300 "
+                    className="text-sm md:font-bold md:text-base lg:text-xl text-white "
                   />
                   <button
                     onClick={() => {
                       setShowBannerModal(true);
                       clearInterval(slideInterval);
                     }}
-                    className="flex  text-white text-sm md:text-base gap-x-2 items-center justify-center  rounded-full bg-green-500 max-w-[9rem]  md:max-w-[12rem] min-h-fit py-3 mt-8 hover:cursor-pointer z-30 "
+                    className="flex text-sm md:text-base gap-x-2 items-center justify-center text-black rounded-full bg-sky-500 max-w-[9rem] md:max-w-[12rem] min-h-fit py-3 mt-8 hover:cursor-pointer z-30 "
                   >
                     <PlayIcon className="h-5 w-5" />
                     Watch Now
@@ -91,7 +91,7 @@ const Banner = () => {
                     className={`h-7 w-7 p-1  hidden md:inline rounded-full border-emerald-500 bg-violet-700 hover:bg-emerald-500/80 text-white hover:text-violet-700 left-[10%] z-10 cursor-pointer opacity-0 group-hover:opacity-100 `}
                     onClick={prevSlide}
                   />
-                  {Array.from({ length: 14 }).map((item, index) => (
+                  {Array.from({ length: 10 }).map((item, index) => (
                     <div
                       key={index}
                       className={`${

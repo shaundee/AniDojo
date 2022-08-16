@@ -21,7 +21,6 @@ const Home = ({
   comedyAnime,
   dramaAnime,
   romanceAnime,
-  allAnime,
 }) => {
   // console.log(trendingAnime);
 
@@ -71,7 +70,6 @@ export const getServerSideProps = async () => {
     { data: comedyAnime },
     { data: dramaAnime },
     { data: romanceAnime },
-    { data: allAnime },
   ] = await Promise.all([
     fetch(requests.fetchTrending).then((res) => res.json()),
     fetch(requests.fetchPopular).then((res) => res.json()),
@@ -79,7 +77,6 @@ export const getServerSideProps = async () => {
     fetch(requests.fetchComedy).then((res) => res.json()),
     fetch(requests.fetchDrama).then((res) => res.json()),
     fetch(requests.fetchRomance).then((res) => res.json()),
-    fetch(requests.fetchAllAnime).then((res) => res.json()),
   ]);
 
   return {
@@ -90,7 +87,6 @@ export const getServerSideProps = async () => {
       comedyAnime,
       dramaAnime,
       romanceAnime,
-      allAnime,
     },
   };
 };

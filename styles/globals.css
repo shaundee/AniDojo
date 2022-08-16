@@ -9,8 +9,18 @@
 }
 @layer components {
   .bannerContainer {
-    box-shadow: inset 0px -30px 50px 90px rgba(19, 20, 28);
+    box-shadow: inset 0px -80px 50px 0px rgba(19, 20, 28);
   }
+
+  @media (min-width: 1024px) {
+    .bannerContainer {
+      box-shadow: inset 0px -40px 60px 80px rgba(19, 20, 28);
+    }
+  }
+
+  /* .bannerContainerXS {
+     box-shadow: inset 0px -80px 50px 0px rgba(19, 20, 28);
+  } */
   /* .infoBox {
     box-shadow: 40px 0px 100px 50px #13141c;
   } */
